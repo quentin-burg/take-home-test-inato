@@ -9,7 +9,8 @@
   "scripts": {
     "lint": "eslint .",
     "test": "jest",
-    "start": "babel-node index.js"
+    "start": "babel-node index.js",
+    "dev": "ts-node pharmacy.ts"
   },
   "devDependencies": {
     "@babel/cli": "^7.20.7",
@@ -17,6 +18,8 @@
     "@babel/eslint-parser": "^7.19.1",
     "@babel/node": "^7.20.7",
     "@babel/preset-env": "^7.20.2",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^18.15.3",
     "babel-jest": "^29.4.2",
     "eslint": "^8.34.0",
     "eslint-config-prettier": "^8.6.0",
@@ -24,5 +27,9 @@
     "jest": "29.4.2",
     "prettier": "^2.8.4",
     "regenerator-runtime": "^0.13.11"
+  },
+  "dependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.2"
   }
 }
