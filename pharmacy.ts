@@ -1,52 +1,42 @@
-import fs from 'fs';
-
-// TODO refacto types
-type Doliprane = {
-  name: 'Doliprane';
+// #####################
+// ####### TYPES #######
+// #####################
+type DrugSpecs<Name> = {
+  name: Name;
   expiresIn: number;
   benefit: number;
 };
 
-type HerbalTea = {
-  name: 'Herbal Tea';
-  expiresIn: number;
-  benefit: number;
-};
-
-type Fervex = {
-  name: 'Fervex';
-  expiresIn: number;
-  benefit: number;
-};
-
-type MagicPill = {
-  name: 'Magic Pill';
-  expiresIn: number;
-  benefit: number;
-};
-
-type Dafalgan = {
-  name: 'Dafalgan';
-  expiresIn: number;
-  benefit: number;
-};
+type Doliprane = DrugSpecs<'Doliprane'>;
+type HerbalTea = DrugSpecs<'Herbal Tea'>;
+type Fervex = DrugSpecs<'Fervex'>;
+type MagicPill = DrugSpecs<'Magic Pill'>;
+type Dafalgan = DrugSpecs<'Dafalgan'>;
 
 type Drug = Doliprane | HerbalTea | Fervex | MagicPill | Dafalgan;
 
-export const createDoliprane = () =>
-  ({ name: 'Doliprane', expiresIn: 20, benefit: 30 } as Doliprane);
-export const createHerbalTea = () =>
-  ({ name: 'Herbal Tea', expiresIn: 10, benefit: 5 } as HerbalTea);
-export const createFervex = () =>
-  ({ name: 'Fervex', expiresIn: 12, benefit: 35 } as Fervex);
-export const createMagicPill = () =>
-  ({ name: 'Magic Pill', expiresIn: 15, benefit: 40 } as MagicPill);
-export const createDafalgan = () =>
-  ({ name: 'Dafalgan', expiresIn: 13, benefit: 35 } as Dafalgan);
+type OptsCreation<T extends Drug> = Pick<T, 'expiresIn' | 'benefit'>;
 
-const updateDoliprane = (doliprane: Doliprane): Drug => {
-  if (doliprane.benefit <= 0 || doliprane.benefit >= 50)
+// #####################
+// ##### DOLIPRANE #####
+// #####################
+
+export const createDoliprane = (
+  { expiresIn, benefit }: OptsCreation<Doliprane> = {
+    expiresIn: 20,
+    benefit: 30,
+  }
+) => ({ name: 'Doliprane', expiresIn, benefit } as Doliprane);
+
+const updateDoliprane = (doliprane: Doliprane): Doliprane => {
+  if (doliprane.benefit <= 0 || doliprane.benefit > 50)
     return { ...doliprane, expiresIn: doliprane.expiresIn - 1 };
+  if (doliprane.expiresIn <= 0)
+    return {
+      ...doliprane,
+      expiresIn: doliprane.expiresIn - 1,
+      benefit: doliprane.benefit - 2,
+    };
   return {
     ...doliprane,
     benefit: doliprane.benefit - 1,
@@ -54,9 +44,23 @@ const updateDoliprane = (doliprane: Doliprane): Drug => {
   };
 };
 
-const updateHerbalTea = (herbalTea: HerbalTea): Drug => {
-  if (herbalTea.benefit >= 50)
-    return { ...herbalTea, expiresIn: herbalTea.expiresIn - 1 };
+// ######################
+// ##### HERBAL TEA #####
+// ######################
+
+export const createHerbalTea = (
+  { expiresIn, benefit }: OptsCreation<Doliprane> = {
+    expiresIn: 10,
+    benefit: 5,
+  }
+) => ({ name: 'Herbal Tea', expiresIn, benefit } as HerbalTea);
+
+const updateHerbalTea = (herbalTea: HerbalTea): HerbalTea => {
+  if (
+    herbalTea.benefit >= 50 ||
+    (herbalTea.benefit >= 48 && herbalTea.expiresIn <= 0)
+  )
+    return { ...herbalTea, expiresIn: herbalTea.expiresIn - 1, benefit: 50 };
   if (herbalTea.expiresIn <= 0) {
     return {
       ...herbalTea,
@@ -71,11 +75,26 @@ const updateHerbalTea = (herbalTea: HerbalTea): Drug => {
   };
 };
 
-const updateFervex = (fervex: Fervex): Drug => {
+// ######################
+// ####### FERVEX #######
+// ######################
+
+export const createFervex = (
+  { expiresIn, benefit }: OptsCreation<Doliprane> = {
+    expiresIn: 12,
+    benefit: 35,
+  }
+) => ({ name: 'Fervex', expiresIn, benefit } as Fervex);
+
+const updateFervex = (fervex: Fervex): Fervex => {
   if (fervex.expiresIn <= 0)
     return { ...fervex, expiresIn: fervex.expiresIn - 1, benefit: 0 };
-  if (fervex.benefit >= 50)
-    return { ...fervex, expiresIn: fervex.expiresIn - 1 };
+  if (
+    fervex.benefit >= 50 ||
+    (fervex.benefit >= 47 && fervex.expiresIn <= 5) ||
+    (fervex.benefit >= 48 && fervex.expiresIn <= 10)
+  )
+    return { ...fervex, benefit: 50, expiresIn: fervex.expiresIn - 1 };
   if (fervex.expiresIn <= 10 && fervex.expiresIn > 5)
     return {
       ...fervex,
@@ -96,11 +115,42 @@ const updateFervex = (fervex: Fervex): Drug => {
   };
 };
 
-const updateMagicPill = (magicPill: MagicPill): Drug => magicPill;
+// ##########################
+// ####### MAGIC PILL #######
+// ##########################
 
-const updateDafalgan = (dafalgan: Dafalgan): Drug => {
-  if (dafalgan.benefit <= 0)
-    return { ...dafalgan, expiresIn: dafalgan.expiresIn - 1 };
+export const createMagicPill = (
+  { expiresIn, benefit }: OptsCreation<Doliprane> = {
+    expiresIn: 15,
+    benefit: 40,
+  }
+) => ({ name: 'Magic Pill', expiresIn, benefit } as MagicPill);
+
+const updateMagicPill = (magicPill: MagicPill): MagicPill => magicPill;
+
+// ##########################
+// ######## DAFALGAN ########
+// ##########################
+
+export const createDafalgan = (
+  { expiresIn, benefit }: OptsCreation<Doliprane> = {
+    expiresIn: 13,
+    benefit: 35,
+  }
+) => ({ name: 'Dafalgan', expiresIn, benefit } as Dafalgan);
+
+const updateDafalgan = (dafalgan: Dafalgan): Dafalgan => {
+  if (
+    dafalgan.benefit <= 2 ||
+    (dafalgan.benefit <= 4 && dafalgan.expiresIn <= 0)
+  )
+    return { ...dafalgan, benefit: 0, expiresIn: dafalgan.expiresIn - 1 };
+  if (dafalgan.expiresIn <= 0)
+    return {
+      ...dafalgan,
+      expiresIn: dafalgan.expiresIn - 1,
+      benefit: dafalgan.benefit - 4,
+    };
   return {
     ...dafalgan,
     expiresIn: dafalgan.expiresIn - 1,
@@ -108,9 +158,9 @@ const updateDafalgan = (dafalgan: Dafalgan): Drug => {
   };
 };
 
-// 20min
+// ##########################
 
-const updateBenefitValue = (drug: Drug) => {
+export const updateBenefitValue = (drug: Drug) => {
   switch (drug.name) {
     case 'Doliprane':
       return updateDoliprane(drug);
@@ -128,30 +178,3 @@ const updateBenefitValue = (drug: Drug) => {
 export const updateDrugs = (drugs: Drug[]) => {
   return drugs.map(d => updateBenefitValue(d));
 };
-
-let pharmacy = [
-  createDoliprane(),
-  createHerbalTea(),
-  createFervex(),
-  createMagicPill(),
-  createDafalgan(),
-];
-const log = [];
-
-for (let elapsedDays = 0; elapsedDays < 30; elapsedDays++) {
-  pharmacy = updateDrugs(pharmacy);
-  log.push(JSON.parse(JSON.stringify(pharmacy)));
-}
-
-/* eslint-disable no-console */
-fs.writeFile(
-  'new-output.json',
-  JSON.stringify({ result: log }, null, 2).concat('\n'),
-  err => {
-    if (err) {
-      console.log('error');
-    } else {
-      console.log('success');
-    }
-  }
-);
