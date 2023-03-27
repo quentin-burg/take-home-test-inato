@@ -5,6 +5,7 @@ type DrugSpecs<Name> = {
   name: Name;
   expiresIn: number;
   benefit: number;
+  benefitStep: number;
 };
 
 type Doliprane = DrugSpecs<'Doliprane'>;
@@ -26,7 +27,7 @@ export const createDoliprane = (
     expiresIn: 20,
     benefit: 30,
   }
-) => ({ name: 'Doliprane', expiresIn, benefit } as Doliprane);
+) => ({ name: 'Doliprane', expiresIn, benefit, benefitStep: -1 } as Doliprane);
 
 const updateDoliprane = (doliprane: Doliprane): Doliprane => {
   if (doliprane.benefit <= 0 || doliprane.benefit > 50)
@@ -35,11 +36,11 @@ const updateDoliprane = (doliprane: Doliprane): Doliprane => {
     return {
       ...doliprane,
       expiresIn: doliprane.expiresIn - 1,
-      benefit: doliprane.benefit - 2,
+      benefit: doliprane.benefit + 2 * doliprane.benefitStep,
     };
   return {
     ...doliprane,
-    benefit: doliprane.benefit - 1,
+    benefit: doliprane.benefit + 1 * doliprane.benefitStep,
     expiresIn: doliprane.expiresIn - 1,
   };
 };
@@ -53,7 +54,7 @@ export const createHerbalTea = (
     expiresIn: 10,
     benefit: 5,
   }
-) => ({ name: 'Herbal Tea', expiresIn, benefit } as HerbalTea);
+) => ({ name: 'Herbal Tea', expiresIn, benefit, benefitStep: 1 } as HerbalTea);
 
 const updateHerbalTea = (herbalTea: HerbalTea): HerbalTea => {
   if (
@@ -65,12 +66,12 @@ const updateHerbalTea = (herbalTea: HerbalTea): HerbalTea => {
     return {
       ...herbalTea,
       expiresIn: herbalTea.expiresIn - 1,
-      benefit: herbalTea.benefit + 2,
+      benefit: herbalTea.benefit + 2 * herbalTea.benefitStep,
     };
   }
   return {
     ...herbalTea,
-    benefit: herbalTea.benefit + 1,
+    benefit: herbalTea.benefit + 1 * herbalTea.benefitStep,
     expiresIn: herbalTea.expiresIn - 1,
   };
 };
@@ -84,7 +85,7 @@ export const createFervex = (
     expiresIn: 12,
     benefit: 35,
   }
-) => ({ name: 'Fervex', expiresIn, benefit } as Fervex);
+) => ({ name: 'Fervex', expiresIn, benefit, benefitStep: +1 } as Fervex);
 
 const updateFervex = (fervex: Fervex): Fervex => {
   if (fervex.expiresIn <= 0)
@@ -99,18 +100,18 @@ const updateFervex = (fervex: Fervex): Fervex => {
     return {
       ...fervex,
       expiresIn: fervex.expiresIn - 1,
-      benefit: fervex.benefit + 2,
+      benefit: fervex.benefit + 2 * fervex.benefitStep,
     };
   if (fervex.expiresIn <= 5 && fervex.expiresIn > 0)
     return {
       ...fervex,
       expiresIn: fervex.expiresIn - 1,
-      benefit: fervex.benefit + 3,
+      benefit: fervex.benefit + 3 * fervex.benefitStep,
     };
 
   return {
     ...fervex,
-    benefit: fervex.benefit + 1,
+    benefit: fervex.benefit + 1 * fervex.benefitStep,
     expiresIn: fervex.expiresIn - 1,
   };
 };
@@ -124,7 +125,7 @@ export const createMagicPill = (
     expiresIn: 15,
     benefit: 40,
   }
-) => ({ name: 'Magic Pill', expiresIn, benefit } as MagicPill);
+) => ({ name: 'Magic Pill', expiresIn, benefit, benefitStep: 0 } as MagicPill);
 
 const updateMagicPill = (magicPill: MagicPill): MagicPill => magicPill;
 
@@ -137,7 +138,7 @@ export const createDafalgan = (
     expiresIn: 13,
     benefit: 35,
   }
-) => ({ name: 'Dafalgan', expiresIn, benefit } as Dafalgan);
+) => ({ name: 'Dafalgan', expiresIn, benefit, benefitStep: -2 } as Dafalgan);
 
 const updateDafalgan = (dafalgan: Dafalgan): Dafalgan => {
   if (
@@ -149,12 +150,12 @@ const updateDafalgan = (dafalgan: Dafalgan): Dafalgan => {
     return {
       ...dafalgan,
       expiresIn: dafalgan.expiresIn - 1,
-      benefit: dafalgan.benefit - 4,
+      benefit: dafalgan.benefit + 2 * dafalgan.benefitStep,
     };
   return {
     ...dafalgan,
     expiresIn: dafalgan.expiresIn - 1,
-    benefit: dafalgan.benefit - 2,
+    benefit: dafalgan.benefit + 1 * dafalgan.benefitStep,
   };
 };
 

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>180/180</span>
+                <span class='fraction'>181/181</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>180/180</span>
+                <span class='fraction'>181/181</span>
             </div>
         
             
@@ -243,7 +243,9 @@
 <a name='L178'></a><a href='#L178'>178</a>
 <a name='L179'></a><a href='#L179'>179</a>
 <a name='L180'></a><a href='#L180'>180</a>
-<a name='L181'></a><a href='#L181'>181</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -430,6 +432,7 @@ type DrugSpecs&lt;Name&gt; = {
   name: Name;
   expiresIn: number;
   benefit: number;
+  benefitStep: number;
 };
 &nbsp;
 type Doliprane = DrugSpecs&lt;'Doliprane'&gt;;
@@ -451,7 +454,7 @@ export const createDoliprane = (
     expiresIn: 20,
     benefit: 30,
   }
-) =&gt; ({ name: 'Doliprane', expiresIn, benefit } as Doliprane);
+) =&gt; ({ name: 'Doliprane', expiresIn, benefit, benefitStep: -1 } as Doliprane);
 &nbsp;
 const updateDoliprane = (doliprane: Doliprane): Doliprane =&gt; {
   if (doliprane.benefit &lt;= 0 || doliprane.benefit &gt; 50)
@@ -460,11 +463,11 @@ const updateDoliprane = (doliprane: Doliprane): Doliprane =&gt; {
     return {
       ...doliprane,
       expiresIn: doliprane.expiresIn - 1,
-      benefit: doliprane.benefit - 2,
+      benefit: doliprane.benefit + 2 * doliprane.benefitStep,
     };
   return {
     ...doliprane,
-    benefit: doliprane.benefit - 1,
+    benefit: doliprane.benefit + 1 * doliprane.benefitStep,
     expiresIn: doliprane.expiresIn - 1,
   };
 };
@@ -478,7 +481,7 @@ export const createHerbalTea = (
     expiresIn: 10,
     benefit: 5,
   }
-) =&gt; ({ name: 'Herbal Tea', expiresIn, benefit } as HerbalTea);
+) =&gt; ({ name: 'Herbal Tea', expiresIn, benefit, benefitStep: 1 } as HerbalTea);
 &nbsp;
 const updateHerbalTea = (herbalTea: HerbalTea): HerbalTea =&gt; {
   if (
@@ -490,12 +493,12 @@ const updateHerbalTea = (herbalTea: HerbalTea): HerbalTea =&gt; {
     return {
       ...herbalTea,
       expiresIn: herbalTea.expiresIn - 1,
-      benefit: herbalTea.benefit + 2,
+      benefit: herbalTea.benefit + 2 * herbalTea.benefitStep,
     };
   }
   return {
     ...herbalTea,
-    benefit: herbalTea.benefit + 1,
+    benefit: herbalTea.benefit + 1 * herbalTea.benefitStep,
     expiresIn: herbalTea.expiresIn - 1,
   };
 };
@@ -509,7 +512,7 @@ export const createFervex = (
     expiresIn: 12,
     benefit: 35,
   }
-) =&gt; ({ name: 'Fervex', expiresIn, benefit } as Fervex);
+) =&gt; ({ name: 'Fervex', expiresIn, benefit, benefitStep: +1 } as Fervex);
 &nbsp;
 const updateFervex = (fervex: Fervex): Fervex =&gt; {
   if (fervex.expiresIn &lt;= 0)
@@ -524,18 +527,18 @@ const updateFervex = (fervex: Fervex): Fervex =&gt; {
     return {
       ...fervex,
       expiresIn: fervex.expiresIn - 1,
-      benefit: fervex.benefit + 2,
+      benefit: fervex.benefit + 2 * fervex.benefitStep,
     };
   if (fervex.expiresIn &lt;= 5 &amp;&amp; fervex.expiresIn &gt; 0)
     return {
       ...fervex,
       expiresIn: fervex.expiresIn - 1,
-      benefit: fervex.benefit + 3,
+      benefit: fervex.benefit + 3 * fervex.benefitStep,
     };
 &nbsp;
   return {
     ...fervex,
-    benefit: fervex.benefit + 1,
+    benefit: fervex.benefit + 1 * fervex.benefitStep,
     expiresIn: fervex.expiresIn - 1,
   };
 };
@@ -549,7 +552,7 @@ export const createMagicPill = (
     expiresIn: 15,
     benefit: 40,
   }
-) =&gt; ({ name: 'Magic Pill', expiresIn, benefit } as MagicPill);
+) =&gt; ({ name: 'Magic Pill', expiresIn, benefit, benefitStep: 0 } as MagicPill);
 &nbsp;
 const updateMagicPill = (magicPill: MagicPill): MagicPill =&gt; magicPill;
 &nbsp;
@@ -562,7 +565,7 @@ export const createDafalgan = (
     expiresIn: 13,
     benefit: 35,
   }
-) =&gt; ({ name: 'Dafalgan', expiresIn, benefit } as Dafalgan);
+) =&gt; ({ name: 'Dafalgan', expiresIn, benefit, benefitStep: -2 } as Dafalgan);
 &nbsp;
 const updateDafalgan = (dafalgan: Dafalgan): Dafalgan =&gt; {
   if (
@@ -574,12 +577,12 @@ const updateDafalgan = (dafalgan: Dafalgan): Dafalgan =&gt; {
     return {
       ...dafalgan,
       expiresIn: dafalgan.expiresIn - 1,
-      benefit: dafalgan.benefit - 4,
+      benefit: dafalgan.benefit + 2 * dafalgan.benefitStep,
     };
   return {
     ...dafalgan,
     expiresIn: dafalgan.expiresIn - 1,
-    benefit: dafalgan.benefit - 2,
+    benefit: dafalgan.benefit + 1 * dafalgan.benefitStep,
   };
 };
 &nbsp;
@@ -610,7 +613,7 @@ export const updateDrugs = (drugs: Drug[]) =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-03-25T16:21:26.708Z
+                at 2023-03-27T07:29:31.264Z
             </div>
         <script src="prettify.js"></script>
         <script>
